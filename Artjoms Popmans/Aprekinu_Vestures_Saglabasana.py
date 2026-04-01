@@ -1,0 +1,2 @@
+def AprekinuVesturesSaglabasana():
+  print("AprekinuVesturesSaglabasana")
