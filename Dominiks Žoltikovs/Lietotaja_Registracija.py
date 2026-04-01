@@ -1,0 +1,2 @@
+def LietotajaRegistracija():
+  print("LietotajaRegistracija")

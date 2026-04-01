@@ -1,0 +1,2 @@
+def RekinaPievienosana():
+  print("RekinaPievienosana")
