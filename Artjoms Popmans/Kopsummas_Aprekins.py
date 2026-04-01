@@ -1,2 +1,0 @@
-def KopsummasAprekins():
-  print("KopsummasAprekins")

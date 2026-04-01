@@ -1,2 +1,0 @@
-def DatuValidacija():
-  print("DatuValidacija")

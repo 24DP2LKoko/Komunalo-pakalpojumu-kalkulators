@@ -1,2 +1,0 @@
-def VidejaPaterinaAprekins():
-  print("VidejaPaterinaAprekins")

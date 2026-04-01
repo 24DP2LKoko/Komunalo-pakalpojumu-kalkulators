@@ -1,2 +1,0 @@
-def AprekinuVesturesSaglabasana():
-  print("AprekinuVesturesSaglabasana")
