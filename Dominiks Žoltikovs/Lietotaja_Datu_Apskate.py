@@ -1,0 +1,2 @@
+def LietotajaDatuApskate():
+  print("LietotajaDatuApskate")
