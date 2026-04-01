@@ -1,0 +1,2 @@
+def DatuValidacija():
+  print("DatuValidacija")

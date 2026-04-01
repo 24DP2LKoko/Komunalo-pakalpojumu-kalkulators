@@ -1,0 +1,2 @@
+def DatuAttelosanaGrafikos():
+  print("DatuAttelosanaGrafikos")

@@ -1,0 +1,2 @@
+def IzmainuAnalizePaPeriodiem():
+  print("IzmainuAnalizePaPeriodiem")
