@@ -1,5 +1,5 @@
 from Kopsummas_aprekins import aprekinit_kopsummu
-from datu_validacija import parbaudit_skaitli
+from Datu_Validacija import parbaudit_skaitli
 
 def aprekinit_pakalpojumu_maksu(paterins, tarifs):
     '''
