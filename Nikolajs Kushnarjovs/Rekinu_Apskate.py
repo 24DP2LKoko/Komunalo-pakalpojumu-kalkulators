@@ -1,0 +1,2 @@
+def RekinuApskate():
+  print("RekinuApskate")
