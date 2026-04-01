@@ -1,4 +1,4 @@
-from MaksajumuAprekins import aprekinit_komunalos_maksajumus
+from Maksajumu_Aprekins import aprekinit_komunalos_maksajumus
 
 def atjaunot_aprekinu(
     udens_paterins,
