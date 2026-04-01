@@ -1,0 +1,2 @@
+def RekinaDzesana():
+  print("RekinaDzesana")
