@@ -1,7 +1,7 @@
 # saraksts, kur glabāsim rēķinus
-rekini = []
-def pievienot_rekinu():
+from rekini import rekini
 
+def pievienot_rekinu():
     id = len(rekini) + 1
     print("=== Jauna rēķina pievienošana ===")
     

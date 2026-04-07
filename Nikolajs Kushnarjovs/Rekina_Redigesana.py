@@ -1,4 +1,4 @@
-from Rekina_Pievienosana import pievienot_rekinu
+from rekini import rekini
 
 def rediget_rekinu():
   print("=== Rēķina rediģēšana ===")
@@ -13,6 +13,6 @@ def rediget_rekinu():
       rekins["datums"] = input("Jauns datums: ")
       
       print("Rēķins veiksmīgi atjaunots!\n")
-        return
+      return
 
   print("Rēķins nav atrasts!\n")

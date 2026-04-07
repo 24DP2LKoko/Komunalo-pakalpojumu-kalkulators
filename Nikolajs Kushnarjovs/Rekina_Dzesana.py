@@ -1,4 +1,4 @@
-from Rekina_Pievienosana import pievienot_rekinu
+from rekini import rekini
 
 def RekinaDzesana():
   print("=== Rēķina dzēšana ===")
