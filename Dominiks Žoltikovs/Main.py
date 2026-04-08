@@ -1,4 +1,5 @@
 class komunalo_maksu_kalkulators:
+
     def paradit_lietotaja_paneli(lietotajs):
 
         '''
@@ -6,6 +7,15 @@ class komunalo_maksu_kalkulators:
         vērtību lietotajs un neatgriež vērtību
         '''
 
+        def pievienoties_db():
+            mydb = mysql.connector.connect(
+            host="sql.freedb.tech",
+            user="freedb_dominiks",
+            password="wDCZqbM3v2D!3Er",
+            database="freedb_dzivokli"
+        
+            )
+        
 
         print("\n=== SVEICIENI! ===")
 
