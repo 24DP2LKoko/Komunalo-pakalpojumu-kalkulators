@@ -1,0 +1,2 @@
+def LietotajaAutorizacija():
+  print("LietotajaAutorizacija")
