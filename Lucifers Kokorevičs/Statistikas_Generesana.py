@@ -31,4 +31,3 @@ def StatistikasGeneresana(rekinu_saraksts):
         "max_periods":      max(periodu_summas, key=periodu_summas.get),
         "pa_pakalpojumiem": pa_pakalpojumiem
     }
-

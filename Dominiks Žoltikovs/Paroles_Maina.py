@@ -1,2 +1,0 @@
-def ParolesMaina():
-  print("ParolesMaina")

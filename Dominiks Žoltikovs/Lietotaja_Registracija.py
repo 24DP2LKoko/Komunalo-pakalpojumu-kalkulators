@@ -1,146 +1,84 @@
 from Datu_validacija import parbaudit_skaitli, parbaudit_tuksu_lauku, parbaudit_epastu
+import mysql.connector
 
-def ievadit_iedzivotaja_datus():
-  '''
-  Funkcija ievadit_iedzivotaja_datus pieņem None tipa vērtību
-  un atgriež dict tipa vērtību iedzivotajs
-  '''
+class lietotaja_registracija:
 
-  vards = parbaudit_tuksu_lauku(input("Ievadiet vārdu: "), "Vārds")
-  uzvards = parbaudit_tuksu_lauku(input("Ievadiet uzvārdu: "), "Uzvārds")
-  epasts = parbaudit_epastu(input("Ievadiet e-pastu: "), "E-pasts")
-  adrese = parbaudit_tuksu_lauku(input("Ievadiet adresi: "), "Adrese")
-  dzivokla_nr = parbaudit_skaitli(input("Ievadiet dzīvokļa nr.: "), "Dzīvokļa nr.")
+  def ievadit_iedzivotaja_datus():
+    
+    '''
+    Funkcija pieņem None tipa vērtību. Šī funkcija nostrādā kad lietotājs reģistrācijas laikā izvēlās "īrnieka" lomu. 
+    No lietotāja tiek pieprasīti vairāki ievadi ar personas datiem. Kad visi dati tika ievadīti pareizi tie tiek ierakstīti datubāzē.
+    '''
 
-  iedzivotajs = {
-    "loma": "Iedzīvotājs",
-    "vards": vards,
-    "uzvards": uzvards,
-    "epasts": epasts,
-    "adrese": adrese,
-    "dzivokla_nr": dzivokla_nr
-  }
+    personas_kods = parbaudit_tuksu_lauku(input("Ievadiet personas kodu: "), "Personas kods")
+    vards = parbaudit_tuksu_lauku(input("Ievadiet vārdu: "), "Vārds")
+    uzvards = parbaudit_tuksu_lauku(input("Ievadiet uzvārdu: "), "Uzvārds")
+    epasts = parbaudit_epastu(input("Ievadiet e-pastu: "), "E-pasts")
+    adrese = parbaudit_tuksu_lauku(input("Ievadiet adresi: "), "Adrese")
+    dzivokla_nr = parbaudit_skaitli(input("Ievadiet dzīvokļa nr.: "), "Dzīvokļa nr.")
 
-  return iedzivotajs
+    sql = "INSERT INTO irnieki (personas_kods, vards, uzvards, epasts, adrese, dz_nr) VALUES (%s, %s, %s, %s , %s, %s)"
+    val = (vards, uzvards, epasts, adrese, dzivokla_nr)
 
-def ievadit_saimnieka_datus():
-  '''
-  Funkcija ievadit_saimnieka_datus pieņem None tipa vērtību
-  un atgriež dict tipa vērtību saimnieks
-  '''
+    mycursor.execute(sql, val)
+    mydb.commit()
 
-  vards = parbaudit_tuksu_lauku(input("Ievadiet vārdu: "), "Vārds")
-  uzvards = parbaudit_tuksu_lauku(input("Ievadiet uzvārdu: "), "Uzvārds")
-  epasts = parbaudit_epastu(input("Ievadiet e-pastu: "), "E-pasts")
-  parvaldama_majas_adrese = parbaudit_tuksu_lauku(input("Ievadiet pārvaldāmās mājas adresi: "),
-  "Pārvaldāmās mājas adrese")
+  def ievadit_saimnieka_datus():
 
-  print("\nIevadiet informāciju par pārvaldāmo māju:")
+    '''
+    Funkcija pieņem None tipa vērtību. Šī funkcija nostrādā kad lietotājs reģistrācijas laikā izvēlās "īrnieka" lomu. 
+    No lietotāja tiek pieprasīti vairāki ievadi ar personas datiem. Tad no lietotāja tiek pieprasīts ievadīt datus par māju kas tam pieder. Kad visi dati tika ievadīti pareizi tie tiek ierakstīti datubāzē.
+    '''
+    personas_kods = parbaudit_tuksu_lauku(input("Ievadiet personas kodu: "), "Personas kods")
+    vards = parbaudit_tuksu_lauku(input("Ievadiet vārdu: "), "Vārds")
+    uzvards = parbaudit_tuksu_lauku(input("Ievadiet uzvārdu: "), "Uzvārds")
+    epasts = parbaudit_epastu(input("Ievadiet e-pastu: "), "E-pasts")
 
-  adrese = parbaudit_tuksu_lauku(input("Adrese: "), "Adrese")
-  majas_numurs = parbaudit_skaitli(input("Mājas numurs: "), "Mājas numurs")
-  dzivoklu_skaits = parbaudit_skaitli(input("Dzīvokļu skaits: "), "Dzīvokļu skaits")
-  stavi = parbaudit_skaitli(input("Stāvu skaits: "), "Stāvu skaits")
+    print("\nIevadiet informāciju par pārvaldāmo māju:")
 
-  saimnieks = {
-    "loma" = "Saimnieks",
-    "vards": vards,
-    "uzvards": uzvards,
-    "epasts": epasts,
-    "parvaldama_majas_adrese": parvaldama_majas_adrese,
-    "maja": {
-      "adrese": adrese,
-      "majas_numurs": majas_numurs,
-      "dzivoklu_skaits": dzivoklu_skaits,
-      "stavi": stavi
-    }
-  }
+    adrese = parbaudit_tuksu_lauku(input("Adrese: "), "Adrese")
+    majas_numurs = parbaudit_skaitli(input("Mājas numurs: "), "Mājas numurs")
+    dzivoklu_skaits = parbaudit_skaitli(input("Dzīvokļu skaits: "), "Dzīvokļu skaits")
+    stavi = parbaudit_skaitli(input("Stāvu skaits: "), "Stāvu skaits")
 
-  return saimnieks
+    sql = "INSERT INTO ipasnieks (personas_kods, vards, uzvards, epasts, parvaldamas_majas_adrese) VALUES (%s, %s, %s, %s ,%s, %s)"
+    val = (vards, uzvards, epasts, adrese,)
 
-def registret_lietotaju():
-  '''
-  Funkcija registret_lietotaju pieņem None tipa vērtību
-  un atgriež dict tipa vērtību lietotajs
-  '''
+    mycursor.execute(sql, val)
 
-  print("Laipni lūdzam komunālo pakalpojumu kalkulātorā!")
-  print("Izvēlieties, kas reģistrējas:")
-  print("1 - Iedzīvotājs")
-  print("2 - Saimnieks")
+    sql = "INSERT INTO majas (adrese, majas_nr, dz_sk, stavi) VALUES (%s, %s, %s, %s)"
+    val = (adrese, majas_numurs)
 
-  izvele = input("Jūsu izvēle: ").strip()
+    mycursor.execute(sql, val)
+    mydb.commit()
 
-  if izvele == "1":
-    lietotajs = ievadit_iedzivotaja_datus()
-  elif izvele == "2":
-    lietotajs = ievadit_saimnieka_datus()
-  else:
-    raise ValueError("Kļūda: jāievada 1 vai 2.")
+  def registret_lietotaju():
+    '''
+    Funkcija pieņem None tipa vērtību. Šī funkcija nostrādā kad lietotājs galvenajā izvēlnē izvēlas opciju "Reģistrēt jaunu lietotāju". 
+    No lietotāja tiek pieprasīts izvēlēties lietotāju ar kādu lomu tas vēlas reģistrēt (katrai lomai ir savs atbilstošais numurs) un pēc izvēlētās lomas tiek palaista atbilstoša funkcija.
+    '''
 
-  print("\nReģistrācija veiksmīga.")
-  return lietotajs
+    print("Laipni lūdzam komunālo pakalpojumu kalkulātorā!")
+    print("Izvēlieties, kas reģistrējas:")
+    print("1 - Iedzīvotājs")
+    print("2 - Saimnieks")
 
-if __name__ == "__main__":
-  try:
-    lietotajs = registret_lietotaju()
-    print("\nReģistrētie dati:")
-    print(lietotajs)
-  except ValueError as kluda:
-    print(kluda)
+    izvele = input("Jūsu izvēle: ").strip()
 
+    if izvele == "1":
+      lietotajs = ievadit_iedzivotaja_datus()
+    elif izvele == "2":
+      lietotajs = ievadit_saimnieka_datus()
+    else:
+      raise ValueError("Kļūda: jāievada 1 vai 2.")
 
-==============
+    print("\nReģistrācija veiksmīga.")
+    return lietotajs
 
-
-
-def paradit_lietotaja_paneli(lietotajs):
-  '''
-  Funkcija paradit_lietotaja_paneli pieņem dict tipa
-  vērtību lietotajs un neatgriež vērtību
-  '''
-
-  print("\n=== SVEICIENI! ===")
-
-  vards = lietotajs.get("vards", "")
-  uzvards = lietotajs.get("uzvards", "")
-  loma = lietotajs.get("loma", "")
-
-  print(f"Sveicināti, {vards} {uzvards}")
-  print(f"Jūs esat pieslēdzies kā: {loma}")
-
-  print("\n=== GALVENĀ IZVĒLNE ===")
-  print("1. Pievienot rēķinu")
-  print("2. Rediģēt rēķinu")
-  print("3. Dzēst rēķinu")
-  print("4. Apskatīt rēķinus")
-  print("5. Filtrēt rēķinus")
-  print("6. Meklēt rēķinus")
-  print("7. Izrakstīties")
-
-  izvele = input("Izvēlieties darbību: ").strip()
-
-  if izvele == "1":
-    pievienot_rekinu()
-
-  elif izvele == "2":
-    rediget_rekinu()
-
-  elif izvele == "3":
-    RekinaDzesana()
-  
-  elif izvele == "4":
-    RekinuApskate()
-  
-  elif izvele == "5":
-    filtre_rekinus()
-  
-  elif izvele == "6":
-    RekinuMeklesana()
-
-  elif izvele == "7":
-    print("\nIzrakstīšanās...")
-    break
-
-  else:
-    print("Kļūda: ievadiet skaitli no 1 līdz 7.")
+  if __name__ == "__main__":
+    try:
+      lietotajs = registret_lietotaju()
+      print("\nReģistrētie dati:")
+      print(lietotajs)
+    except ValueError as kluda:
+      print(kluda)

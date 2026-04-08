@@ -1,2 +1,2 @@
 def KontaDzesana():
-  print("KontaDzesana")
+  
