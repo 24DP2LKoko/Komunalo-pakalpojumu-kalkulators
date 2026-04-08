@@ -1,0 +1,20 @@
+def LielakoIzdevumuNoteiksana(rekinu_saraksts, tops=3):
+    """
+    Pieņem list rekinu_saraksts un int tops, atgriež list lielako_izdevumu_saraksts.
+    Saraksts satur TOP N lielākos izdevumus ar laukiem: periods, veids, summa.
+    """
+    if not rekinu_saraksts:
+        raise ValueError("Kļūda: rēķinu saraksts ir tukšs.")
+
+    visi = [
+        {
+            "periods": rekins.get("periods", "Nav norādīts"),
+            "veids": p.get("veids", "Nezināms"),
+            "summa": round(p["paterins"] * p["tarifs"], 2)
+        }
+        for rekins in rekinu_saraksts
+        for p in rekins.get("pakalpojumi", [])
+    ]
+
+    # Kārto dilstošā secībā un atgriež tikai norādīto skaitu
+    return sorted(visi, key=lambda x: x["summa"], reverse=True)[:tops]
