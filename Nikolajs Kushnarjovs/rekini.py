@@ -1,0 +1,2 @@
+# kopigais list
+rekini = []
