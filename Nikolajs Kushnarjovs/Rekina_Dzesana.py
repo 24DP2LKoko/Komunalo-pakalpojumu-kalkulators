@@ -6,7 +6,7 @@ def RekinaDzesana():
   id = int(input("Ievadiet rēķinu ID: "))
   for rekinis in rekini:
     if rekini[rekinis]["id"] == id:
-      del rekini[i]
+      del rekini[rekinis]
       print("Dzēst!")
       return
   
