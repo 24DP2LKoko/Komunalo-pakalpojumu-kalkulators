@@ -1,2 +1,0 @@
-def LietotajaAutorizacija():
-  print("LietotajaAutorizacija")

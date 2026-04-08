@@ -1,2 +1,0 @@
-def ProfilaRedigesana():
-  print("ProfilaRedigesana")

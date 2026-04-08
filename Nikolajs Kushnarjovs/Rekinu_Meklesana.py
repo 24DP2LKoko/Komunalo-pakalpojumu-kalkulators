@@ -1,2 +1,0 @@
-def RekinuMeklesana():
-  print("RekinuMeklesana")
