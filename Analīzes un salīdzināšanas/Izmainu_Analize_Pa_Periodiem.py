@@ -1,53 +1,38 @@
+from MaksajumuAprekins import aprekinit_pakalpojumu_maksu
+
 def IzmainuAnalizePaPeriodiem(rekinu_saraksts):
     """
-    Funkcija IzmainuAnalizePaPeriodiem pieņem list tipa vērtību rekinu_saraksts
-    un atgriež list tipa vērtību izmain_saraksts.
-
-    Katrs elements sarakstā ir dict ar atslēgām:
-        "periods"     - teksts, piemēram "2024-01"
-        "pakalpojumi" - list ar dict elementiem, kur katram ir:
-                        "veids", "paterins", "tarifs"
-
-    Atgriežamais saraksts satur dict elementus ar:
-        "periods"   - pašreizējais periods
-        "summa"     - kopējā summa šajā periodā
-        "izmaina"   - starpība salīdzinot ar iepriekšējo periodu (None pirmajam)
-        "izmaina_%" - procentuālā izmaiņa (None pirmajam periodam)
+    funkcija IzmainuAnalizePaPeriodiem pieņem list tipa vērtību rekinu_saraksts un atgriež list tipa vērtību izmainu_saraksts
     """
     if not rekinu_saraksts:
         raise ValueError("Kļūda: rēķinu saraksts ir tukšs.")
 
-    izmain_saraksts = []
-    iepriekšeja_summa = None
+    izmainu_saraksts = []
+    iepriekseja_summa = None
 
     for rekins in rekinu_saraksts:
         periods = rekins.get("periods", "Nav norādīts")
+        
+        # Aprēķina kopējo summu konkrētajam periodam
+        kopeja_summa = 0
+        for p in rekins.get("pakalpojumi", []):
+            kopeja_summa += aprekinit_pakalpojumu_maksu(p["paterins"], p["tarifs"])
+        kopeja_summa = round(kopeja_summa, 2)
 
-        # Aprēķina kopējo summu periodam
-        kopeja_summa = round(
-            sum(p["paterins"] * p["tarifs"] for p in rekins.get("pakalpojumi", [])),
-            2
-        )
-
-        # Aprēķina izmaiņu salīdzinot ar iepriekšējo periodu
-        if iepriekšeja_summa is None:
+        # Nosaka izmaiņas pret iepriekšējo periodu (ja tas pastāv)
+        if iepriekseja_summa is None:
             izmaina = None
             izmaina_procenti = None
         else:
-            izmaina = round(kopeja_summa - iepriekšeja_summa, 2)
-            # Izvairās dalīt ar nulli
-            if iepriekšeja_summa != 0:
-                izmaina_procenti = round((izmaina / iepriekšeja_summa) * 100, 2)
-            else:
-                izmaina_procenti = None
+            izmaina = round(kopeja_summa - iepriekseja_summa, 2)
+            izmaina_procenti = round((izmaina / iepriekseja_summa) * 100, 2) if iepriekseja_summa != 0 else None
 
-        izmain_saraksts.append({
+        izmainu_saraksts.append({
             "periods": periods,
             "summa": kopeja_summa,
             "izmaina": izmaina,
             "izmaina_%": izmaina_procenti
         })
+        iepriekseja_summa = kopeja_summa
 
-        iepriekšeja_summa = kopeja_summa
-
-    return izmain_saraksts
+    return izmainu_saraksts

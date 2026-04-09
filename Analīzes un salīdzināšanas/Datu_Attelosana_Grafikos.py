@@ -1,24 +1,22 @@
-import matplotlib.pyplot as plt
+from MaksajumuAprekins import aprekinit_pakalpojumu_maksu
 
 def DatuAttelosanaGrafikos(rekinu_saraksts):
     """
-    Pieņem list rekinu_saraksts, atgriež None.
-    Attēlo joslu diagrammu ar izmaksām pa periodiem.
+    funkcija DatuAttelosanaGrafikos pieņem list tipa vērtību rekinu_saraksts un atgriež None tipa vērtību None
     """
     if not rekinu_saraksts:
         raise ValueError("Kļūda: rēķinu saraksts ir tukšs.")
 
-    periodi = [r.get("periods", "?") for r in rekinu_saraksts]
-    summas = [
-        round(sum(p["paterins"] * p["tarifs"] for p in r.get("pakalpojumi", [])), 2)
-        for r in rekinu_saraksts
-    ]
+    # ASCII tabulu uz ekrāna
+    print(f"{'Periods':<15} | {'Kopējā summa (EUR)':<20}")
+    print("-" * 38)
 
-    plt.figure(figsize=(10, 5))
-    plt.bar(periodi, summas, color="steelblue")
-    plt.title("Komunālo izmaksu sadalījums pa periodiem")
-    plt.xlabel("Periods")
-    plt.ylabel("Kopējā summa (EUR)")
-    plt.xticks(rotation=45, ha="right")
-    plt.tight_layout()
-    plt.show()
+    for rekins in rekinu_saraksts:
+        periods = rekins.get("periods", "?")
+        summa = 0
+        for p in rekins.get("pakalpojumi", []):
+            # Integrējam funkciju no aprēķinu apakšsistēmas
+            maksa = aprekinit_pakalpojumu_maksu(p["paterins"], p["tarifs"])
+            summa += maksa
+            
+        print(f"{periods:<15} | {round(summa, 2):<20}")

@@ -1,9 +1,9 @@
-from datu_validacija import parbaudit_skaitli
+from Datu_Validacija import parbaudit_skaitli
+from MaksajumuAprekins import aprekinit_pakalpojumu_maksu
 
 def RekinuSalidzinasana(rekinu_saraksts):
     """
-    Pieņem list rekinu_saraksts, atgriež dict salidzinajums.
-    Katrs elements: {"periods": str, "pakalpojumi": [{"veids", "paterins", "tarifs"}]}
+    funkcija RekinuSalidzinasana pieņem list tipa vērtību rekinu_saraksts un atgriež dict tipa vērtību salidzinajums
     """
     if len(rekinu_saraksts) < 2:
         raise ValueError("Kļūda: nepieciešami vismaz 2 rēķini.")
@@ -11,11 +11,14 @@ def RekinuSalidzinasana(rekinu_saraksts):
     salidzinajums = {}
     for i, rekins in enumerate(rekinu_saraksts):
         periods = rekins.get("periods", f"Periods {i + 1}")
-        summa = sum(
-            parbaudit_skaitli(p["paterins"], "Patēriņš") *
-            parbaudit_skaitli(p["tarifs"], "Tarifs")
-            for p in rekins.get("pakalpojumi", [])
-        )
+        summa = 0
+        
+        for p in rekins.get("pakalpojumi", []):
+            # Datu validācija pirms tālākā aprēķina
+            paterins = parbaudit_skaitli(p["paterins"], "Patēriņš")
+            tarifs = parbaudit_skaitli(p["tarifs"], "Tarifs")
+            summa += aprekinit_pakalpojumu_maksu(paterins, tarifs)
+            
         salidzinajums[periods] = round(summa, 2)
 
     return salidzinajums
