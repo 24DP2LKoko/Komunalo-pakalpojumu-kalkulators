@@ -1,6 +1,6 @@
-from rekini import rekini
+from calculations.rekini import rekini
 
-def RekinuMeklesana():
+def rekinu_meklesana():
   print("=== Meklēšana ===")
   
   atsl = input("Ievadiet meklējamo vārdu (veids vai datums): ").lower()

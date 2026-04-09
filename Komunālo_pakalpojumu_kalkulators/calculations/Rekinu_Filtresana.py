@@ -1,4 +1,4 @@
-from rekini import rekini
+from calculations.rekini import rekini
 
 def filtre_rekinus():
     print("=== Filtrēšana ===")

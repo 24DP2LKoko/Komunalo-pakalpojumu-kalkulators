@@ -1,13 +1,14 @@
-from rekini import rekini
+from calculations.rekini import rekini
 
-def RekinaDzesana():
-  print("=== Rēķina dzēšana ===")
+def dzest_rekinu():
+    print("=== Rēķina dzēšana ===")
 
-  id = int(input("Ievadiet rēķinu ID: "))
-  for rekinis in rekini:
-    if rekini[rekinis]["id"] == id:
-      del rekini[rekinis]
-      print("Dzēst!")
-      return
-  
-  print("Nav atrasts!")
+    rekina_id = int(input("Ievadiet rēķinu ID: "))
+
+    for i, rekins in enumerate(rekini):
+        if rekins["id"] == rekina_id:
+            del rekini[i]
+            print("Dzēst!")
+            return
+
+    print("Nav atrasts!")

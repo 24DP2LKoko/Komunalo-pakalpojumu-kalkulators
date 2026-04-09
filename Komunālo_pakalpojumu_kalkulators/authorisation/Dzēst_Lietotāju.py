@@ -1,6 +1,4 @@
-import mysql.connector
-from Main import komunalo_maksu_kalkulators
-from db_utils import pievienoties_db
+from authorisation.db_utils import pievienoties_db
 
 class dzest_lietotaju:
     
@@ -15,15 +13,13 @@ class dzest_lietotaju:
         atbilde = input("Vai esat pārliecināts, ka vēlaties dzēst šo lietotāju? (Jā/Nē): ")
 
         if atbilde == "Jā":
-            sql = "DELETE FROM irnieki WHERE personas_kods = %s"
+            sql = "DELETE FROM iedzivotaji WHERE personas_kods = %s"
             val = (personas_kods,)
             mycursor.execute(sql, val)
             mydb.commit()
             print("Lietotājs veiksmīgi dzēsts.")
-            komunalo_maksu_kalkulators().paradit_lietotaja_paneli(lietotajs)
         else:
             print("Darbība atcelta. Atgriežamies uz galveno izvēlni.")
-            komunalo_maksu_kalkulators().paradit_lietotaja_paneli(lietotajs)
         
         mydb.close()
 
@@ -39,20 +35,18 @@ class dzest_lietotaju:
 
         if atbilde == "Jā":
             
-            sql_majas = "DELETE FROM majas WHERE adrese IN (SELECT parvaldamas_majas_adrese FROM ipasnieks WHERE personas_kods = %s)"
+            sql_majas = "DELETE FROM majas WHERE adrese IN (SELECT parvaldamas_majas_adrese FROM saimnieki WHERE personas_kods = %s)"
             val = (personas_kods,)
             mycursor.execute(sql_majas, val)
             
             
-            sql_ipasnieks = "DELETE FROM ipasnieks WHERE personas_kods = %s"
+            sql_ipasnieks = "DELETE FROM saimnieki WHERE personas_kods = %s"
             mycursor.execute(sql_ipasnieks, val)
             
             mydb.commit()
             print("Īpašnieks un viņa mājas veiksmīgi dzēstas.")
-            komunalo_maksu_kalkulators().paradit_lietotaja_paneli(lietotajs)
         else:
             print("Darbība atcelta. Atgriežamies uz galveno izvēlni.")
-            komunalo_maksu_kalkulators().paradit_lietotaja_paneli(lietotajs)
         
         mydb.close()
 
@@ -72,9 +66,7 @@ class dzest_lietotaju:
             mycursor.execute(sql, val)
             mydb.commit()
             print("Māja veiksmīgi dzēsta.")
-            komunalo_maksu_kalkulators().paradit_lietotaja_paneli(lietotajs)
         else:
             print("Darbība atcelta. Atgriežamies uz galveno izvēlni.")
-            komunalo_maksu_kalkulators().paradit_lietotaja_paneli(lietotajs)
         
         mydb.close()

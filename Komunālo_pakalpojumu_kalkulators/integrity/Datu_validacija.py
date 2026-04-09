@@ -1,7 +1,4 @@
-def __init__(self):
-    pass
-
-def parbaudit_skaitli(self, vertiba, lauka_nosaukums):
+def parbaudit_skaitli(vertiba, lauka_nosaukums):
     '''
     Funkcija parbaudit_skaitli pieņem str tipa vērtību
     vertiba un str tipa vērtību lauka_nosaukums un

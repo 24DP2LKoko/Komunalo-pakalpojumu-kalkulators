@@ -1,5 +1,5 @@
 # saraksts, kur glabāsim rēķinus
-from rekini import rekini
+from calculations.rekini import rekini
 
 def pievienot_rekinu():
     id = len(rekini) + 1

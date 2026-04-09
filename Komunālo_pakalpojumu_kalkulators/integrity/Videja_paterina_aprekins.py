@@ -1,4 +1,4 @@
-from Datu_validacija import parbaudit_skaitli
+from integrity.Datu_validacija import parbaudit_skaitli
 
 def aprekinit_videjo_paterinu(paterinu_saraksts):
     '''

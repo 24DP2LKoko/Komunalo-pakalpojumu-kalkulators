@@ -1,6 +1,5 @@
-from Datu_validacija import parbaudit_skaitli, parbaudit_tuksu_lauku, parbaudit_epastu
-import mysql.connector
-from db_utils import pievienoties_db
+from integrity.Datu_validacija import parbaudit_skaitli, parbaudit_tuksu_lauku, parbaudit_epastu
+from authorisation.db_utils import pievienoties_db
 
 class Lietotaja_Datu_Redigesana:
     def rediget_profilu_irnieks():
@@ -23,27 +22,27 @@ class Lietotaja_Datu_Redigesana:
 
       if izvele == "1":
         vards = parbaudit_tuksu_lauku(input("Ievadiet jauno vārdu: "), "Vārds")
-        sql = "UPDATE irnieki SET vards = %s WHERE personas_kods = %s"
+        sql = "UPDATE iedzivotaji SET vards = %s WHERE personas_kods = %s"
         val = (vards, personas_kods)
 
       elif izvele == "2":
         uzvards = parbaudit_tuksu_lauku(input("Ievadiet jauno uzvārdu: "), "Uzvārds")
-        sql = "UPDATE irnieki SET uzvards = %s WHERE personas_kods = %s"
+        sql = "UPDATE iedzivotaji SET uzvards = %s WHERE personas_kods = %s"
         val = (uzvards, personas_kods)
 
       elif izvele == "3":
         jauns_personas_kods = parbaudit_tuksu_lauku(input("Ievadiet jauno personas kodu: "), "Personas kods")
-        sql = "UPDATE irnieki SET personas_kods = %s WHERE personas_kods = %s"
+        sql = "UPDATE iedzivotaji SET personas_kods = %s WHERE personas_kods = %s"
         val = (jauns_personas_kods, personas_kods)
 
       elif izvele == "4":
         adrese = parbaudit_tuksu_lauku(input("Ievadiet jauno adresi: "), "Adrese")
-        sql = "UPDATE irnieki SET adrese = %s WHERE personas_kods = %s"
+        sql = "UPDATE iedzivotaji SET adrese = %s WHERE personas_kods = %s"
         val = (adrese, personas_kods)
 
       elif izvele == "5":
         dzivokla_nr = parbaudit_skaitli(input("Ievadiet jauno dzīvokļa numuru: "), "Dzīvokļa numurs")
-        sql = "UPDATE irnieki SET dz_nr = %s WHERE personas_kods = %s"
+        sql = "UPDATE iedzivotaji SET dz_nr = %s WHERE personas_kods = %s"
         val = (dzivokla_nr, personas_kods)
 
       else:
@@ -79,27 +78,27 @@ class Lietotaja_Datu_Redigesana:
 
       if izvele == "1":
         vards = parbaudit_tuksu_lauku(input("Ievadiet jauno vārdu: "), "Vārds")
-        sql = "UPDATE ipasnieks SET vards = %s WHERE personas_kods = %s"
+        sql = "UPDATE saimnieki SET vards = %s WHERE personas_kods = %s"
         val = (vards, personas_kods)
 
       elif izvele == "2":
         uzvards = parbaudit_tuksu_lauku(input("Ievadiet jauno uzvārdu: "), "Uzvārds")
-        sql = "UPDATE ipasnieks SET uzvards = %s WHERE personas_kods = %s"
+        sql = "UPDATE saimnieki SET uzvards = %s WHERE personas_kods = %s"
         val = (uzvards, personas_kods)
 
       elif izvele == "3":
         jauns_personas_kods = parbaudit_tuksu_lauku(input("Ievadiet jauno personas kodu: "), "Personas kods")
-        sql = "UPDATE ipasnieks SET personas_kods = %s WHERE personas_kods = %s"
+        sql = "UPDATE saimnieki SET personas_kods = %s WHERE personas_kods = %s"
         val = (jauns_personas_kods, personas_kods)
 
       elif izvele == "4":
         epasts = parbaudit_epastu(input("Ievadiet jauno e-pastu: "), "E-pasts")
-        sql = "UPDATE ipasnieks SET epasts = %s WHERE personas_kods = %s"
+        sql = "UPDATE saimnieki SET epasts = %s WHERE personas_kods = %s"
         val = (epasts, personas_kods)
 
       elif izvele == "5":
         parvaldamas_adrese = parbaudit_tuksu_lauku(input("Ievadiet jauno pārvaldāmās mājas adresi: "), "Pārvaldāmās mājas adrese")
-        sql = "UPDATE ipasnieks SET parvaldamas_majas_adrese = %s WHERE personas_kods = %s"
+        sql = "UPDATE saimnieki SET parvaldamas_majas_adrese = %s WHERE personas_kods = %s"
         val = (parvaldamas_adrese, personas_kods)
 
       else:

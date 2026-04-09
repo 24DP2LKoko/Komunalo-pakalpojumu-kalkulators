@@ -1,38 +1,47 @@
-from MaksajumuAprekins import aprekinit_pakalpojumu_maksu
-
 def IzmainuAnalizePaPeriodiem(rekinu_saraksts):
     """
     funkcija IzmainuAnalizePaPeriodiem pieņem list tipa vērtību rekinu_saraksts un atgriež list tipa vērtību izmainu_saraksts
     """
+
     if not rekinu_saraksts:
         raise ValueError("Kļūda: rēķinu saraksts ir tukšs.")
 
-    izmainu_saraksts = []
-    iepriekseja_summa = None
+    periodu_summas = {}
 
     for rekins in rekinu_saraksts:
         periods = rekins.get("periods", "Nav norādīts")
-        
-        # Aprēķina kopējo summu konkrētajam periodam
-        kopeja_summa = 0
-        for p in rekins.get("pakalpojumi", []):
-            kopeja_summa += aprekinit_pakalpojumu_maksu(p["paterins"], p["tarifs"])
-        kopeja_summa = round(kopeja_summa, 2)
+        summa = float(rekins.get("summa", 0))
 
-        # Nosaka izmaiņas pret iepriekšējo periodu (ja tas pastāv)
+        if periods not in periodu_summas:
+            periodu_summas[periods] = 0
+
+        periodu_summas[periods] += summa
+
+    sakartoti_periodi = sorted(periodu_summas.items())
+    izmainu_saraksts = []
+    iepriekseja_summa = None
+
+    for periods, summa in sakartoti_periodi:
+        summa = round(summa, 2)
+
         if iepriekseja_summa is None:
             izmaina = None
             izmaina_procenti = None
         else:
-            izmaina = round(kopeja_summa - iepriekseja_summa, 2)
-            izmaina_procenti = round((izmaina / iepriekseja_summa) * 100, 2) if iepriekseja_summa != 0 else None
+            izmaina = round(summa - iepriekseja_summa, 2)
+
+            if iepriekseja_summa != 0:
+                izmaina_procenti = round((izmaina / iepriekseja_summa) * 100, 2)
+            else:
+                izmaina_procenti = None
 
         izmainu_saraksts.append({
             "periods": periods,
-            "summa": kopeja_summa,
+            "summa": summa,
             "izmaina": izmaina,
             "izmaina_%": izmaina_procenti
         })
-        iepriekseja_summa = kopeja_summa
+
+        iepriekseja_summa = summa
 
     return izmainu_saraksts

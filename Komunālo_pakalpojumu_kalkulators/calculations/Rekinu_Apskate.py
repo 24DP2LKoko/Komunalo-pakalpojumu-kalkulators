@@ -1,5 +1,5 @@
-from rekini import rekini
-def RekinuApskate():
+from calculations.rekini import rekini
+def rekinu_apskate():
   print("ID | Veids | Summa | Datums")
   print("-----------------------------")
 

@@ -1,6 +1,5 @@
 from integrity.Datu_validacija import parbaudit_skaitli, parbaudit_tuksu_lauku, parbaudit_epastu
-import mysql.connector
-from db_utils import pievienoties_db
+from authorisation.db_utils import pievienoties_db
 
 class lietotaja_registracija:
 
@@ -20,13 +19,23 @@ class lietotaja_registracija:
     adrese = parbaudit_tuksu_lauku(input("Ievadiet adresi: "), "Adrese")
     dzivokla_nr = parbaudit_skaitli(input("Ievadiet dzīvokļa nr.: "), "Dzīvokļa nr.")
 
-    sql = "INSERT INTO irnieki (personas_kods, vards, uzvards, epasts, adrese, dz_nr) VALUES (%s, %s, %s, %s , %s, %s)"
+    sql = "INSERT INTO iedzivotaji (personas_kods, vards, uzvards, epasts, adrese, dz_nr) VALUES (%s, %s, %s, %s , %s, %s)"
     val = (personas_kods, vards, uzvards, epasts, adrese, dzivokla_nr)
 
     mycursor.execute(sql, val)
     mydb.commit()
 
     mydb.close()
+
+    return {
+    "loma": "Iedzīvotājs",
+    "personas_kods": personas_kods,
+    "vards": vards,
+    "uzvards": uzvards,
+    "epasts": epasts,
+    "adrese": adrese,
+    "dzivokla_nr": dzivokla_nr
+  }
 
   def ievadit_saimnieka_datus():
 
@@ -49,7 +58,7 @@ class lietotaja_registracija:
     dzivoklu_skaits = parbaudit_skaitli(input("Dzīvokļu skaits: "), "Dzīvokļu skaits")
     stavi = parbaudit_skaitli(input("Stāvu skaits: "), "Stāvu skaits")
 
-    sql = "INSERT INTO ipasnieks (personas_kods, vards, uzvards, epasts, parvaldamas_majas_adrese) VALUES (%s, %s, %s, %s, %s)"
+    sql = "INSERT INTO saimnieki (personas_kods, vards, uzvards, epasts, parvaldamas_majas_adrese) VALUES (%s, %s, %s, %s, %s)"
     val = (personas_kods, vards, uzvards, epasts, adrese)
 
     mycursor.execute(sql, val)
@@ -61,6 +70,18 @@ class lietotaja_registracija:
     mydb.commit()
 
     mydb.close()
+
+    return {
+    "loma": "Saimnieks",
+    "personas_kods": personas_kods,
+    "vards": vards,
+    "uzvards": uzvards,
+    "epasts": epasts,
+    "adrese": adrese,
+    "majas_numurs": majas_numurs,
+    "dzivoklu_skaits": dzivoklu_skaits,
+    "stavi": stavi
+    }
 
   def registret_lietotaju():
     '''
@@ -76,19 +97,11 @@ class lietotaja_registracija:
     izvele = input("Jūsu izvēle: ").strip()
 
     if izvele == "1":
-      lietotajs = ievadit_iedzivotaja_datus()
+      lietotajs = lietotaja_registracija.ievadit_iedzivotaja_datus()
     elif izvele == "2":
-      lietotajs = ievadit_saimnieka_datus()
+      lietotajs = lietotaja_registracija.ievadit_saimnieka_datus()
     else:
       raise ValueError("Kļūda: jāievada 1 vai 2.")
 
     print("\nReģistrācija veiksmīga.")
     return lietotajs
-
-  if __name__ == "__main__":
-    try:
-      lietotajs = registret_lietotaju()
-      print("\nReģistrētie dati:")
-      print(lietotajs)
-    except ValueError as kluda:
-      print(kluda)
