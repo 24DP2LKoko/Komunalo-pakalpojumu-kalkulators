@@ -1,3 +1,7 @@
+import mysql
+from db_utils import pievienoties_db
+
+
 class komunalo_maksu_kalkulators:
 
     def paradit_lietotaja_paneli(lietotajs):
@@ -6,15 +10,6 @@ class komunalo_maksu_kalkulators:
         Funkcija paradit_lietotaja_paneli pieņem dict tipa
         vērtību lietotajs un neatgriež vērtību
         '''
-
-        def pievienoties_db():
-            mydb = mysql.connector.connect(
-            host="sql.freedb.tech",
-            user="freedb_dominiks",
-            password="wDCZqbM3v2D!3Er",
-            database="freedb_dzivokli"
-        
-            )
         
 
         print("\n=== SVEICIENI! ===")

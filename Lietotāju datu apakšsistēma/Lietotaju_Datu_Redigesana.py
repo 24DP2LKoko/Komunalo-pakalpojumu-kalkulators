@@ -1,5 +1,6 @@
 from Datu_validacija import parbaudit_skaitli, parbaudit_tuksu_lauku, parbaudit_epastu
 import mysql.connector
+from db_utils import pievienoties_db
 
 class Lietotaja_Datu_Redigesana:
     def rediget_profilu_irnieks():
@@ -18,13 +19,7 @@ class Lietotaja_Datu_Redigesana:
       izvele = input("Izvēlieties darbību: ").strip()
       personas_kods = parbaudit_tuksu_lauku(input("Ievadiet personas kodu, pēc kura atrast ierakstu: "), "Personas kods")
 
-      mydb = mysql.connector.connect(
-          host="sql.freedb.tech",
-          user="freedb_dominiks",
-          password="wDCZqbM3v2D!3Er",
-          database="freedb_dzivokli"
-      )
-      mycursor = mydb.cursor()
+      mydb, mycursor = pievienoties_db()
 
       if izvele == "1":
         vards = parbaudit_tuksu_lauku(input("Ievadiet jauno vārdu: "), "Vārds")
@@ -80,13 +75,7 @@ class Lietotaja_Datu_Redigesana:
       izvele = input("Izvēlieties darbību: ").strip()
       personas_kods = parbaudit_tuksu_lauku(input("Ievadiet īpašnieka personas kodu, pēc kura atrast ierakstu: "), "Personas kods")
 
-      mydb = mysql.connector.connect(
-          host="sql.freedb.tech",
-          user="freedb_dominiks",
-          password="wDCZqbM3v2D!3Er",
-          database="freedb_dzivokli"
-      )
-      mycursor = mydb.cursor()
+      mydb, mycursor = pievienoties_db()
 
       if izvele == "1":
         vards = parbaudit_tuksu_lauku(input("Ievadiet jauno vārdu: "), "Vārds")
@@ -142,13 +131,7 @@ class Lietotaja_Datu_Redigesana:
       adrese = parbaudit_tuksu_lauku(input("Ievadiet mājas adresi, pēc kuras atrast ierakstu: "), "Adrese")
       majas_nr = parbaudit_skaitli(input("Ievadiet mājas numuru, pēc kura atrast ierakstu: "), "Mājas numurs")
 
-      mydb = mysql.connector.connect(
-          host="sql.freedb.tech",
-          user="freedb_dominiks",
-          password="wDCZqbM3v2D!3Er",
-          database="freedb_dzivokli"
-      )
-      mycursor = mydb.cursor()
+      mydb, mycursor = pievienoties_db()
 
       if izvele == "1":
         jauna_adrese = parbaudit_tuksu_lauku(input("Ievadiet jauno adresi: "), "Adrese")
