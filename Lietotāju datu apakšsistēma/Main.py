@@ -1,5 +1,15 @@
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'Nikolajs Kushnarjovs'))
+
 import mysql
 from db_utils import pievienoties_db
+from Rekina_Pievienosana import pievienot_rekinu
+from Rekina_Redigesana import rediget_rekinu
+from Rekina_Dzesana import RekinaDzesana
+from Rekinu_Apskate import RekinuApskate
+from Rekinu_Filtresana import filtre_rekinus
+from Rekinu_Meklesana import RekinuMeklesana
 
 
 class komunalo_maksu_kalkulators:
