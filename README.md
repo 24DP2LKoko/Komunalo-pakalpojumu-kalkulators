@@ -41,7 +41,7 @@ Sistēma izmanto MySQL datubāzi, kurā tiek glabāti:
 Pirms projektu var palaist ir jāparbauda vai visi no šiem punktiem ir izpildīti:
 1. Instalēt jaunāko python versiju uz sava datora
 2. Nodrošināties, ka kopā ar python ir arī instalēta pip sistēma izmantojot komandu `pip help`, ja komanda izvada kļūdu instalēt pip uz sava datora izmantojot `python3 get-pip.py` ja lietotājs izmanto Windows vai MacOS, `$ sudo apt install python3-pip` ja lietotājs izmanto linux operētājsistmēmu
-3. Instalēt MySql konektoru izmantojot komandu `$ pip install mysql-connector-python`
+3. Instalēt MySql konektoru, PDF un xlsx novertētājus izmantojot komandu `$ pip install mysql-connector-python openyxl fpdf`
 
 ## Kā palaist projektu
 
