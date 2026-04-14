@@ -11,8 +11,9 @@ from Komunalo_pakalpojumu_kalkulators.integrity.Videja_paterina_aprekins import 
 from Komunalo_pakalpojumu_kalkulators.integrity.automatiska_atjaunosana import atjaunot_aprekinu
 from Komunalo_pakalpojumu_kalkulators.integrity.Datu_validacija import (
     parbaudit_tuksu_lauku,
-    parbaudit_skaitli,
     parbaudit_epastu,
+    parbaudit_personas_kodu,
+    parbaudit_veselu_skaitli,
 )
 
 from Komunalo_pakalpojumu_kalkulators.data.Datu_Attelosana_Grafikos import DatuAttelosanaGrafikos
@@ -38,27 +39,31 @@ class komunalo_maksu_kalkulators:
 
             if izvele == "1":
                 try:
-                    lietotajs = self.registret_lietotaju_lokali()
+                    lietotajs = self.registret_lietotaju()
                     self.paradit_lietotaja_paneli(lietotajs)
+                except ValueError as kluda:
+                    print(kluda)
                 except Exception as kluda:
-                    print(f"Kļūda: {kluda}")
+                    print(f"Neizdevās pabeigt reģistrāciju: {kluda}")
 
             elif izvele == "2":
                 try:
-                    lietotajs = self.autorizet_lietotaju_lokali()
+                    lietotajs = self.autorizet_lietotaju()
                     if lietotajs is not None:
                         self.paradit_lietotaja_paneli(lietotajs)
+                except ValueError as kluda:
+                    print(kluda)
                 except Exception as kluda:
-                    print(f"Kļūda: {kluda}")
+                    print(f"Neizdevās pabeigt autorizāciju: {kluda}")
 
             elif izvele == "3":
                 print("Programma tiek aizvērta.")
                 break
 
             else:
-                print("Kļūda: ievadiet 1, 2 vai 3.")
+                print("Jāievada 1, 2 vai 3.")
 
-    def registret_lietotaju_lokali(self):
+    def registret_lietotaju(self):
         print("\nLaipni lūdzam komunālo pakalpojumu kalkulatorā!")
         print("Izvēlieties, kas reģistrējas:")
         print("1 - Iedzīvotājs")
@@ -67,12 +72,15 @@ class komunalo_maksu_kalkulators:
         izvele = input("Jūsu izvēle: ").strip()
 
         if izvele == "1":
-            personas_kods = parbaudit_tuksu_lauku(input("Ievadiet personas kodu: "), "Personas kods")
+            personas_kods = parbaudit_personas_kodu(
+                input("Ievadiet personas kodu (XXXXXX-XXXXX): "),
+                "Personas kods"
+            )
             vards = parbaudit_tuksu_lauku(input("Ievadiet vārdu: "), "Vārds")
             uzvards = parbaudit_tuksu_lauku(input("Ievadiet uzvārdu: "), "Uzvārds")
             epasts = parbaudit_epastu(input("Ievadiet e-pastu: "), "E-pasts")
             adrese = parbaudit_tuksu_lauku(input("Ievadiet adresi: "), "Adrese")
-            dzivokla_nr = parbaudit_skaitli(input("Ievadiet dzīvokļa nr.: "), "Dzīvokļa nr.")
+            dzivokla_nr = parbaudit_veselu_skaitli(input("Ievadiet dzīvokļa nr.: "), "Dzīvokļa nr.")
 
             lietotajs = {
                 "loma": "Iedzīvotājs",
@@ -81,20 +89,23 @@ class komunalo_maksu_kalkulators:
                 "uzvards": uzvards,
                 "epasts": epasts,
                 "adrese": adrese,
-                "dzivokla_nr": dzivokla_nr,
+                "dzivokla_nr": dzivokla_nr
             }
 
         elif izvele == "2":
-            personas_kods = parbaudit_tuksu_lauku(input("Ievadiet personas kodu: "), "Personas kods")
+            personas_kods = parbaudit_personas_kodu(
+                input("Ievadiet personas kodu (XXXXXX-XXXXX): "),
+                "Personas kods"
+            )
             vards = parbaudit_tuksu_lauku(input("Ievadiet vārdu: "), "Vārds")
             uzvards = parbaudit_tuksu_lauku(input("Ievadiet uzvārdu: "), "Uzvārds")
             epasts = parbaudit_epastu(input("Ievadiet e-pastu: "), "E-pasts")
 
             print("\nIevadiet informāciju par pārvaldāmo māju:")
             adrese = parbaudit_tuksu_lauku(input("Adrese: "), "Adrese")
-            majas_numurs = parbaudit_skaitli(input("Mājas numurs: "), "Mājas numurs")
-            dzivoklu_skaits = parbaudit_skaitli(input("Dzīvokļu skaits: "), "Dzīvokļu skaits")
-            stavi = parbaudit_skaitli(input("Stāvu skaits: "), "Stāvu skaits")
+            majas_numurs = parbaudit_veselu_skaitli(input("Mājas numurs: "), "Mājas numurs")
+            dzivoklu_skaits = parbaudit_veselu_skaitli(input("Dzīvokļu skaits: "), "Dzīvokļu skaits")
+            stavi = parbaudit_veselu_skaitli(input("Stāvu skaits: "), "Stāvu skaits")
 
             lietotajs = {
                 "loma": "Saimnieks",
@@ -105,44 +116,45 @@ class komunalo_maksu_kalkulators:
                 "adrese": adrese,
                 "majas_numurs": majas_numurs,
                 "dzivoklu_skaits": dzivoklu_skaits,
-                "stavi": stavi,
+                "stavi": stavi
             }
 
         else:
-            raise ValueError("Kļūda: jāievada 1 vai 2.")
+            raise ValueError("Jāievada 1 vai 2.")
 
-        for esoss in lietotaji:
-            if esoss["personas_kods"] == lietotajs["personas_kods"]:
-                raise ValueError("Kļūda: lietotājs ar šādu personas kodu jau pastāv.")
+        for esoss_lietotajs in lietotaji:
+            if esoss_lietotajs["personas_kods"] == lietotajs["personas_kods"]:
+                raise ValueError("Lietotājs ar šādu personas kodu jau pastāv.")
 
         lietotaji.append(lietotajs)
         print("\nReģistrācija veiksmīga.")
         return lietotajs
 
-    def autorizet_lietotaju_lokali(self):
+    def autorizet_lietotaju(self):
         print("\n=== LIETOTĀJA AUTORIZĀCIJA ===")
         print("Izvēlieties lietotāja tipu:")
         print("1 - Iedzīvotājs")
         print("2 - Saimnieks")
 
         izvele = input("Jūsu izvēle: ").strip()
-        personas_kods = parbaudit_tuksu_lauku(input("Ievadiet personas kodu: "), "Personas kods")
+        personas_kods = parbaudit_personas_kodu(
+            input("Ievadiet personas kodu (XXXXXX-XXXXX): "),
+            "Personas kods"
+        )
 
-        meklejama_loma = None
         if izvele == "1":
-            meklejama_loma = "Iedzīvotājs"
+            loma = "Iedzīvotājs"
         elif izvele == "2":
-            meklejama_loma = "Saimnieks"
+            loma = "Saimnieks"
         else:
-            print("Kļūda: jāievada 1 vai 2.")
-            return None
+            raise ValueError("Jāievada 1 vai 2.")
 
         for lietotajs in lietotaji:
-            if lietotajs["personas_kods"] == personas_kods and lietotajs["loma"] == meklejama_loma:
+            if lietotajs["personas_kods"] == personas_kods and lietotajs["loma"] == loma:
                 print("\nAutorizācija veiksmīga.")
                 return lietotajs
 
-        print("Kļūda: lietotājs netika atrasts.")
+        print("Lietotājs netika atrasts.")
         return None
 
     def paradit_lietotaja_paneli(self, lietotajs):
@@ -208,34 +220,16 @@ class komunalo_maksu_kalkulators:
                     self.eksportet_datus_interaktivs()
 
                 elif izvele == "12":
-                    rezultats = IzmainuAnalizePaPeriodiem(rekini)
-                    print("\nIzmaiņu analīze pa periodiem:")
-                    for ieraksts in rezultats:
-                        print(ieraksts)
+                    self.attelot_izmainu_analizi()
 
                 elif izvele == "13":
-                    tops = input("Ievadiet, cik lielākos izdevumus attēlot (Enter = 3): ").strip()
-                    if tops == "":
-                        tops = 3
-                    else:
-                        tops = int(tops)
-
-                    rezultats = LielakoIzdevumuNoteiksana(rekini, tops)
-                    print("\nLielākie izdevumi:")
-                    for ieraksts in rezultats:
-                        print(ieraksts)
+                    self.attelot_lielakos_izdevumus()
 
                 elif izvele == "14":
-                    rezultats = RekinuSalidzinasana(rekini)
-                    print("\nRēķinu salīdzinājums:")
-                    for periods, summa in rezultats.items():
-                        print(f"{periods}: {summa} EUR")
+                    self.attelot_rekinu_salidzinasanu()
 
                 elif izvele == "15":
-                    rezultats = StatistikasGeneresana(rekini)
-                    print("\nStatistika:")
-                    for atslega, vertiba in rezultats.items():
-                        print(f"{atslega}: {vertiba}")
+                    self.attelot_statistiku()
 
                 elif izvele == "16":
                     self.rediget_profilu(lietotajs)
@@ -249,10 +243,12 @@ class komunalo_maksu_kalkulators:
                     break
 
                 else:
-                    print("Kļūda: ievadiet skaitli no 1 līdz 18.")
+                    print("Jāievada skaitlis no 1 līdz 18.")
 
+            except ValueError as kluda:
+                print(kluda)
             except Exception as kluda:
-                print(f"Kļūda: {kluda}")
+                print(f"Radās neparedzēta kļūda: {kluda}")
 
     def aprekinat_komunalos_maksajumus_interaktivs(self):
         print("\n=== KOMUNĀLO MAKSĀJUMU APRĒĶINS ===")
@@ -277,7 +273,7 @@ class komunalo_maksu_kalkulators:
             apkures_tarifs
         )
 
-        print("\nAprēķina rezultāts:")
+        print("\n=== APRĒĶINA REZULTĀTS ===")
         print(f"Ūdens maksa: {rezultats['udens_maksa']} EUR")
         print(f"Elektrības maksa: {rezultats['elektribas_maksa']} EUR")
         print(f"Gāzes maksa: {rezultats['gazes_maksa']} EUR")
@@ -286,9 +282,15 @@ class komunalo_maksu_kalkulators:
 
     def aprekinat_videjo_paterinu_interaktivs(self):
         print("\n=== VIDĒJĀ PATĒRIŅA APRĒĶINS ===")
-        dati = input("Ievadiet patēriņus, atdalot ar komatiem (piemēram: 10,20,30): ")
+
+        dati = parbaudit_tuksu_lauku(
+            input("Ievadiet patēriņus, atdalot ar komatiem (piemēram: 10,20,30): "),
+            "Patēriņu saraksts"
+        )
+
         paterinu_saraksts = [x.strip() for x in dati.split(",")]
         rezultats = aprekinit_videjo_paterinu(paterinu_saraksts)
+
         print(f"Vidējais patēriņš: {rezultats}")
 
     def atjaunot_aprekinu_interaktivs(self):
@@ -314,7 +316,7 @@ class komunalo_maksu_kalkulators:
             apkures_tarifs
         )
 
-        print("\nAtjaunotais rezultāts:")
+        print("\n=== ATJAUNOTAIS REZULTĀTS ===")
         print(f"Ūdens maksa: {rezultats['udens_maksa']} EUR")
         print(f"Elektrības maksa: {rezultats['elektribas_maksa']} EUR")
         print(f"Gāzes maksa: {rezultats['gazes_maksa']} EUR")
@@ -323,10 +325,84 @@ class komunalo_maksu_kalkulators:
 
     def eksportet_datus_interaktivs(self):
         print("\n=== DATU EKSPORTĒŠANA ===")
-        fails = input("Ievadiet faila nosaukumu: ").strip()
-        formats = input("Ievadiet formātu (xlsx/pdf): ").strip().lower()
+
+        fails = parbaudit_tuksu_lauku(input("Ievadiet faila nosaukumu: ").strip(), "Faila nosaukums")
+        formats = parbaudit_tuksu_lauku(input("Ievadiet formātu (xlsx/pdf): ").strip().lower(), "Formāts")
+
         rezultats = DatuEksportesana(rekini, fails, formats)
         print(f"Dati eksportēti failā: {rezultats}")
+
+    def attelot_izmainu_analizi(self):
+        rezultats = IzmainuAnalizePaPeriodiem(rekini)
+
+        print("\n=== IZMAIŅU ANALĪZE PA PERIODIEM ===")
+        print("-" * 72)
+        print(f"{'Periods':<15} {'Kopējā summa':<18} {'Izmaiņa':<18} {'Izmaiņa %':<15}")
+        print("-" * 72)
+
+        for ieraksts in rezultats:
+            print(
+                f"{ieraksts['Periods']:<15} "
+                f"{str(ieraksts['Kopējā summa']) + ' EUR':<18} "
+                f"{str(ieraksts['Izmaiņa']):<18} "
+                f"{str(ieraksts['Izmaiņa procentos']):<15}"
+            )
+
+        print("-" * 72)
+
+    def attelot_lielakos_izdevumus(self):
+        tops = input("Ievadiet, cik lielākos izdevumus attēlot (Enter = 3): ").strip()
+
+        if tops == "":
+            tops = 3
+        else:
+            tops = int(tops)
+
+        rezultats = LielakoIzdevumuNoteiksana(rekini, tops)
+
+        print("\n=== LIELĀKIE IZDEVUMI ===")
+        print("-" * 72)
+        print(f"{'ID':<5} {'Periods':<12} {'Veids':<20} {'Summa (EUR)':<15}")
+        print("-" * 72)
+
+        for ieraksts in rezultats:
+            print(
+                f"{ieraksts['id']:<5} "
+                f"{ieraksts['periods']:<12} "
+                f"{ieraksts['veids']:<20} "
+                f"{ieraksts['summa']:<15}"
+            )
+
+        print("-" * 72)
+
+    def attelot_rekinu_salidzinasanu(self):
+        rezultats = RekinuSalidzinasana(rekini)
+
+        print("\n=== RĒĶINU SALĪDZINĀJUMS ===")
+        print("-" * 35)
+        print(f"{'Periods':<15} {'Summa (EUR)':<15}")
+        print("-" * 35)
+
+        for periods, summa in rezultats.items():
+            print(f"{periods:<15} {summa:<15}")
+
+        print("-" * 35)
+
+    def attelot_statistiku(self):
+        rezultats = StatistikasGeneresana(rekini)
+
+        print("\n=== STATISTIKA ===")
+        print(f"Periodu skaits: {rezultats['Periodu skaits']}")
+        print(f"Kopējā summa: {rezultats['Kopējā summa']} EUR")
+        print(f"Vidējā summa: {rezultats['Vidējā summa']} EUR")
+        print(f"Mazākā summa: {rezultats['Mazākā summa']} EUR")
+        print(f"Lielākā summa: {rezultats['Lielākā summa']} EUR")
+        print(f"Periods ar mazāko summu: {rezultats['Periods ar mazāko summu']}")
+        print(f"Periods ar lielāko summu: {rezultats['Periods ar lielāko summu']}")
+
+        print("\nIzdevumi pa pakalpojumu veidiem:")
+        for veids, summa in rezultats["Izdevumi pa pakalpojumu veidiem"].items():
+            print(f"- {veids}: {summa} EUR")
 
     def rediget_profilu(self, lietotajs):
         print("\n=== PROFILA REDIĢĒŠANA ===")
@@ -345,13 +421,19 @@ class komunalo_maksu_kalkulators:
             elif izvele == "2":
                 lietotajs["uzvards"] = parbaudit_tuksu_lauku(input("Ievadiet jauno uzvārdu: "), "Uzvārds")
             elif izvele == "3":
-                lietotajs["personas_kods"] = parbaudit_tuksu_lauku(input("Ievadiet jauno personas kodu: "), "Personas kods")
+                lietotajs["personas_kods"] = parbaudit_personas_kodu(
+                    input("Ievadiet jauno personas kodu (XXXXXX-XXXXX): "),
+                    "Personas kods"
+                )
             elif izvele == "4":
                 lietotajs["adrese"] = parbaudit_tuksu_lauku(input("Ievadiet jauno adresi: "), "Adrese")
             elif izvele == "5":
-                lietotajs["dzivokla_nr"] = parbaudit_skaitli(input("Ievadiet jauno dzīvokļa numuru: "), "Dzīvokļa numurs")
+                lietotajs["dzivokla_nr"] = parbaudit_veselu_skaitli(
+                    input("Ievadiet jauno dzīvokļa numuru: "),
+                    "Dzīvokļa numurs"
+                )
             else:
-                print("Kļūda: ievadiet skaitli no 1 līdz 5.")
+                print("Jāievada skaitlis no 1 līdz 5.")
                 return
 
         elif lietotajs.get("loma") == "Saimnieks":
@@ -371,34 +453,51 @@ class komunalo_maksu_kalkulators:
             elif izvele == "2":
                 lietotajs["uzvards"] = parbaudit_tuksu_lauku(input("Ievadiet jauno uzvārdu: "), "Uzvārds")
             elif izvele == "3":
-                lietotajs["personas_kods"] = parbaudit_tuksu_lauku(input("Ievadiet jauno personas kodu: "), "Personas kods")
+                lietotajs["personas_kods"] = parbaudit_personas_kodu(
+                    input("Ievadiet jauno personas kodu (XXXXXX-XXXXX): "),
+                    "Personas kods"
+                )
             elif izvele == "4":
                 lietotajs["epasts"] = parbaudit_epastu(input("Ievadiet jauno e-pastu: "), "E-pasts")
             elif izvele == "5":
                 lietotajs["adrese"] = parbaudit_tuksu_lauku(input("Ievadiet jauno adresi: "), "Adrese")
             elif izvele == "6":
-                lietotajs["majas_numurs"] = parbaudit_skaitli(input("Ievadiet jauno mājas numuru: "), "Mājas numurs")
+                lietotajs["majas_numurs"] = parbaudit_veselu_skaitli(
+                    input("Ievadiet jauno mājas numuru: "),
+                    "Mājas numurs"
+                )
             elif izvele == "7":
-                lietotajs["dzivoklu_skaits"] = parbaudit_skaitli(input("Ievadiet jauno dzīvokļu skaitu: "), "Dzīvokļu skaits")
+                lietotajs["dzivoklu_skaits"] = parbaudit_veselu_skaitli(
+                    input("Ievadiet jauno dzīvokļu skaitu: "),
+                    "Dzīvokļu skaits"
+                )
             elif izvele == "8":
-                lietotajs["stavi"] = parbaudit_skaitli(input("Ievadiet jauno stāvu skaitu: "), "Stāvu skaits")
+                lietotajs["stavi"] = parbaudit_veselu_skaitli(
+                    input("Ievadiet jauno stāvu skaitu: "),
+                    "Stāvu skaits"
+                )
             else:
-                print("Kļūda: ievadiet skaitli no 1 līdz 8.")
+                print("Jāievada skaitlis no 1 līdz 8.")
                 return
 
         print("Dati ir veiksmīgi atjaunināti.")
 
     def dzest_lietotaju(self, lietotajs):
         print("\n=== LIETOTĀJA DZĒŠANA ===")
-        atbilde = input("Vai esat pārliecināts, ka vēlaties dzēst lietotāju? (Jā/Nē): ")
 
-        if atbilde == "Jā":
+        atbilde = input("Vai esat pārliecināts, ka vēlaties dzēst lietotāju? (Jā/Nē): ").strip().lower()
+
+        if atbilde in ["jā", "ja"]:
             if lietotajs in lietotaji:
                 lietotaji.remove(lietotajs)
             print("Lietotājs veiksmīgi dzēsts.")
             return True
 
-        print("Darbība atcelta.")
+        if atbilde in ["nē", "ne"]:
+            print("Darbība atcelta.")
+            return False
+
+        print("Nederīga izvēle. Ievadiet 'Jā' vai 'Nē'.")
         return False
 
 
