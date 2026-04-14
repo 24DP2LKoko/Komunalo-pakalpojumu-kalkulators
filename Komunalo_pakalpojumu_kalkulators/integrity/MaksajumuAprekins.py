@@ -1,14 +1,19 @@
 from Komunalo_pakalpojumu_kalkulators.integrity.Kopsummas_aprekins import aprekinit_kopsummu
 from Komunalo_pakalpojumu_kalkulators.integrity.Datu_validacija import parbaudit_skaitli
 
+
 def aprekinit_pakalpojumu_maksu(paterins, tarifs):
     '''
-    Funkcija aprekinit_pakalpojumu_maksu pieņem float 
-    tipa vērtību paterins un float tipa vērtību tarifs
+    Funkcija aprekinit_pakalpojumu_maksu pieņem float tipa vērtību paterins
+    un float tipa vērtību tarifs un atgriež float tipa vērtību maksa
     '''
 
+    paterins = parbaudit_skaitli(paterins, "Patēriņš")
+    tarifs = parbaudit_skaitli(tarifs, "Tarifs")
+
     maksa = paterins * tarifs
-    return maksa
+    return round(maksa, 2)
+
 
 def aprekinit_komunalos_maksajumus(
     udens_paterins,
@@ -21,9 +26,8 @@ def aprekinit_komunalos_maksajumus(
     apkures_tarifs
 ):
     '''
-    Funkcija aprekinit_komunalos_maksajumus pieņem float
-    tipa vērtības par patēriņiem un tarifiem un atgriež
-    dict tipa vērtību rezultats
+    Funkcija aprekinit_komunalos_maksajumus pieņem float tipa vērtības par patēriņiem un tarifiem
+    un atgriež dict tipa vērtību rezultats
     '''
 
     udens_paterins = parbaudit_skaitli(udens_paterins, "Ūdens patēriņš")
@@ -51,11 +55,11 @@ def aprekinit_komunalos_maksajumus(
     )
 
     rezultats = {
-        "udens_maksa": round(udens_maksa, 2),
-        "elektribas_maksa": round(elektribas_maksa, 2),
-        "gazes_maksa": round(gazes_maksa, 2),
-        "apkures_maksa": round(apkures_maksa, 2),
-        "kopeja_summa": kopa
+        "udens_maksa": udens_maksa,
+        "elektribas_maksa": elektribas_maksa,
+        "gazes_maksa": gazes_maksa,
+        "apkures_maksa": apkures_maksa,
+        "kopeja_summa": round(kopa, 2)
     }
 
     return rezultats

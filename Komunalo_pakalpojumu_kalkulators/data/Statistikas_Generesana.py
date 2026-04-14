@@ -3,14 +3,15 @@ from Komunalo_pakalpojumu_kalkulators.integrity.Videja_paterina_aprekins import 
 
 def StatistikasGeneresana(rekinu_saraksts):
     """
-    funkcija StatistikasGeneresana pieņem list tipa vērtību rekinu_saraksts un atgriež dict tipa vērtību statistika
+    funkcija StatistikasGeneresana pieņem list tipa vērtību rekinu_saraksts
+    un atgriež dict tipa vērtību statistika
     """
 
     if not rekinu_saraksts:
-        raise ValueError("Kļūda: rēķinu saraksts ir tukšs.")
+        raise ValueError("Rēķinu saraksts ir tukšs.")
 
     periodu_summas = {}
-    pa_pakalpojumiem = {}
+    izdevumi_pa_pakalpojumu_veidiem = {}
 
     for rekins in rekinu_saraksts:
         periods = rekins.get("periods", "Nav norādīts")
@@ -23,25 +24,31 @@ def StatistikasGeneresana(rekinu_saraksts):
         periodu_summas[periods] += summa
         periodu_summas[periods] = round(periodu_summas[periods], 2)
 
-        if veids not in pa_pakalpojumiem:
-            pa_pakalpojumiem[veids] = 0
+        if veids not in izdevumi_pa_pakalpojumu_veidiem:
+            izdevumi_pa_pakalpojumu_veidiem[veids] = 0
 
-        pa_pakalpojumiem[veids] += summa
-        pa_pakalpojumiem[veids] = round(pa_pakalpojumiem[veids], 2)
+        izdevumi_pa_pakalpojumu_veidiem[veids] += summa
+        izdevumi_pa_pakalpojumu_veidiem[veids] = round(izdevumi_pa_pakalpojumu_veidiem[veids], 2)
 
     summas = list(periodu_summas.values())
+
     kopeja_summa = round(sum(summas), 2)
-    videja_summa = aprekinit_videjo_paterinu(summas)
+    videja_summa = round(aprekinit_videjo_paterinu(summas), 2)
+    minimala_summa = round(min(summas), 2)
+    maksimala_summa = round(max(summas), 2)
+
+    periods_ar_mazako_summu = min(periodu_summas, key=periodu_summas.get)
+    periods_ar_lielako_summu = max(periodu_summas, key=periodu_summas.get)
 
     statistika = {
-        "periodu_skaits": len(summas),
-        "kopeja_summa": kopeja_summa,
-        "videja_summa": videja_summa,
-        "min_summa": min(summas),
-        "max_summa": max(summas),
-        "min_periods": min(periodu_summas, key=periodu_summas.get),
-        "max_periods": max(periodu_summas, key=periodu_summas.get),
-        "pa_pakalpojumiem": pa_pakalpojumiem
+        "Periodu skaits": len(summas),
+        "Kopējā summa": kopeja_summa,
+        "Vidējā summa": videja_summa,
+        "Mazākā summa": minimala_summa,
+        "Lielākā summa": maksimala_summa,
+        "Periods ar mazāko summu": periods_ar_mazako_summu,
+        "Periods ar lielāko summu": periods_ar_lielako_summu,
+        "Izdevumi pa pakalpojumu veidiem": izdevumi_pa_pakalpojumu_veidiem
     }
 
     return statistika

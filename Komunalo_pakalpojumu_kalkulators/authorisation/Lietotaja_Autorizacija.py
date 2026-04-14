@@ -1,4 +1,4 @@
-from Komunalo_pakalpojumu_kalkulators.integrity.Datu_validacija import parbaudit_tuksu_lauku
+from Komunalo_pakalpojumu_kalkulators.integrity.Datu_validacija import parbaudit_personas_kodu
 from Komunalo_pakalpojumu_kalkulators.authorisation.db_utils import pievienoties_db
 
 
@@ -14,7 +14,10 @@ def LietotajaAutorizacija():
     print("2 - Saimnieks")
 
     izvele = input("Jūsu izvēle: ").strip()
-    personas_kods = parbaudit_tuksu_lauku(input("Ievadiet personas kodu: "), "Personas kods")
+    personas_kods = parbaudit_personas_kodu(
+        input("Ievadiet personas kodu (XXXXXX-XXXXX): "),
+        "Personas kods"
+    )
 
     mydb, mycursor = pievienoties_db()
 
@@ -39,7 +42,7 @@ def LietotajaAutorizacija():
             print("\nAutorizācija veiksmīga.")
             return lietotajs
 
-        print("Kļūda: iedzīvotājs ar šādu personas kodu netika atrasts.")
+        print("Lietotājs ar šādu personas kodu netika atrasts.")
         return None
 
     elif izvele == "2":
@@ -62,11 +65,10 @@ def LietotajaAutorizacija():
             print("\nAutorizācija veiksmīga.")
             return lietotajs
 
-        print("Kļūda: saimnieks ar šādu personas kodu netika atrasts.")
+        print("Īpašnieks ar šādu personas kodu netika atrasts.")
         return None
 
     else:
         mycursor.close()
         mydb.close()
-        print("Kļūda: jāievada 1 vai 2.")
-        return None
+        raise ValueError("Jāievada 1 vai 2.")
